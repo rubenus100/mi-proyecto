@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Editor - SketchUp Style</title>
+    <link rel="stylesheet" href="style.css">
+   <link rel="stylesheet" href="zdog/zdog.js">
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar left-sidebar">
+            <h3>Tools</h3>
+               <div class="toolbar">
+        <input type="color" id="global-color" value="#0066cc" title="Color principal">
+</div>
+            <div class="tools">
+
+               
+                <button id="btn-cube" class="tool-btn active">
+<h1 >&#x01F4E6;</h1>cubo
+          
+</button>
+       <button id="btn-sphere" class="tool-btn">
+
+<h1>&#x01F518;</h1>esfera
+ </button>
+                <button id="btn-cylinder" class="tool-btn">
+ <h1>&#x01F9EB;</h1>cilindro
+</button>
+        <button id="btn-cone" class="tool-btn">
+ <h1>&#x01F53A;</h1> cono
+     </button>
+        <button id="btn-plane" class="tool-btn">
+<h1>&#x01F533;</h1>area
+       </button>
+                <button id="btn-delete" class="tool-btn">
+              cortar
+ <font size="7">&#x2702;&#xFE0F;</font>
+        </button>
+                <button id="btn-clear" class="tool-btn danger">
+              <font size="7">&#x01F9F9;</font>  
+            </div>
+            <div class="texture-controls">
+                <input type="range" id="extrude-amount" min="-2" max="2" step="0.1" value="0.5">
+                <input type="file" id="texture-upload" accept="image/*" hidden>
+                <button onclick="document.getElementById('texture-upload').click()">
+                    <h1>&#x01F4C2;</h1>           
+                </button>
+                <div id="texture-preview" class="texture-preview"></div>
+            </div>
+
+        </aside>
+
+
+        <main class="main-content">
+            <canvas id="canvas3d"></canvas>
+            <div class="toolbar">
+                <button id="btn-reset-view" class="toolbar-btn">
+             <h1>&#x01F3E0;</h1> posicion
+                </button>
+                <label>
+                    <input type="checkbox" id="grid-toggle" checked> Grid
+                </label>
+                <label>
+                    <input type="checkbox" id="auto-rotate">
+         <h1>&#x01F504;</h1>
+                </label>
+             
+           
+            </div>
+        </main>
+
+
+
+        <aside class="sidebar right-sidebar">
+            <h3>Propiedades</h3>
+            <div id="properties" class="properties">
+                <p class="empty-msg">Selecciona un objeto</p>
+             
+                <div class="property-group">
+                    <label>Parámetros de Textura</label>
+                    <input type="range" id="texture-scale" min="0.1" max="5" step="0.1" value="1">
+                    <input type="color" id="texture-tint" value="#ffffff">
+
+                </div>
+ 
+            </div>
+        </aside>
+    </div>
+
+
+
+
+    <script src=" https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js "></script>
+    <!-- Alternativa recomendada para mejores resultados con materiales -->
+    <script src=" https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js "></script>
+    <script src="app.js"></script>
+    <script src="three.js-dev/eslint.config.js"></script>
+    <script src="three.js-dev/build/three.cjs"></script>
+    <script src="three.js-dev/editor/js/Selector.js"></script>
+
+
+
+
+
+  
+  <script src="app.js"></script>
+
+
+</body>
+</html>

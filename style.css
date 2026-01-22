@@ -1,0 +1,13 @@
+body { margin: 0; overflow: hidden; background-color: #121212; font-family: sans-serif; }
+#ui-panel {
+    position: absolute; top: 20px; left: 20px; width: 200px;
+    background: rgba(0,0,0,0.8); color: white; padding: 15px;
+    border-radius: 10px; border: 1px solid #00ff88; z-index: 100;
+}
+.title { font-size: 16px; color: #00ff88; margin: 0 0 10px 0; text-align: center; }
+.control-group { margin-bottom: 10px; }
+label { font-size: 10px; color: #888; display: block; }
+button { width: 100%; padding: 8px; margin-top: 5px; cursor: pointer; border-radius: 5px; border: none; font-weight: bold; }
+.btn-primary { background: #00ff88; }
+.btn-danger { background: #ff4444; color: white; }
+.instructions { font-size: 10px; color: #ccc; margin-top: 10px; line-height: 1.5; }
