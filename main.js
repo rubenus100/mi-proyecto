@@ -1,82 +1,67 @@
-import * as THREE from 'three';
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-
+// Configuración básica de la escena
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0xf0f0f0);
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera.position.set(5, 5, 5);
+scene.background = new THREE.Color(0xdddddd);
 
+// Cámara
+const camera = new THREE.PerspectiveCamera(
+  75,
+  window.innerWidth / window.innerHeight,
+  0.1,
+  1000
+);
+camera.position.set(4, 4, 6);
+camera.lookAt(0, 0, 0);
+
+// Renderizador
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
-document.body.appendChild(renderer.domElement);
+renderer.setPixelRatio(window.devicePixelRatio);
+document.getElementById('scene-container').appendChild(renderer.domElement);
 
-// Luz y Rejilla
-scene.add(new THREE.AmbientLight(0xffffff, 0.7));
-const grid = new THREE.GridHelper(10, 10);
-scene.add(grid);
+// Controles (opcional, facilita orbitear la escena)
+const controls = new THREE.OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.dampingFactor = 0.05;
 
-// --- GEOMETRÍA INICIAL ---
-let currentHeight = 2;
-const shape = new THREE.Shape();
-shape.absarc(0, 0, 1, 0, Math.PI * 2); // Un cilindro simple para probar
+// Iluminación
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+scene.add(ambientLight);
 
-function createExtrusion(height) {
-    const geometry = new THREE.ExtrudeGeometry(shape, { depth: height, bevelEnabled: false });
-    geometry.center();
-    return geometry;
-}
+const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+directionalLight.position.set(5, 10, 7.5);
+scene.add(directionalLight);
 
-let material = new THREE.MeshPhongMaterial({ color: 0x3498db });
-let mesh = new THREE.Mesh(createExtrusion(currentHeight), material);
-scene.add(mesh);
+// Suelo
+const groundGeo = new THREE.PlaneGeometry(10, 10);
+const groundMat = new THREE.MeshStandardMaterial({ color: 0x808080, roughness: 0.7, metalness: 0.0 });
+const ground = new THREE.Mesh(groundGeo, groundMat);
+ground.rotation.x = -Math.PI / 2;
+ground.receiveShadow = true;
+scene.add(ground);
 
-// --- VARIABLES DE ESTADO ---
-let isDragging = false;
-let startMouseY = 0;
-let initialHeight = currentHeight;
-const raycaster = new THREE.Raycaster();
-const mouse = new THREE.Vector2();
-const controls = new OrbitControls(camera, renderer.domElement);
+// Objeto de ejemplo: cubo
+const cubeGeo = new THREE.BoxGeometry(1, 1, 1);
+const cubeMat = new THREE.MeshStandardMaterial({ color: 0x156289 });
+const cube = new THREE.Mesh(cubeGeo, cubeMat);
+cube.position.set(0, 0.5, 0);
+scene.add(cube);
 
-// --- EVENTOS ---
-
-window.addEventListener('mousedown', (e) => {
-    mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
-    mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
-
-    raycaster.setFromCamera(mouse, camera);
-    const intersects = raycaster.intersectObject(mesh);
-
-    if (intersects.length > 0) {
-        // Si tocamos la tapa superior (en este caso el faceIndex varía, pero simplificamos)
-        isDragging = true;
-        startMouseY = e.clientY;
-        initialHeight = currentHeight;
-        controls.enabled = false; // Desactivar rotación de cámara mientras extruimos
-        mesh.material.color.set(0xe74c3c); // Cambia a rojo al editar
-    }
-});
-
-window.addEventListener('mousemove', (e) => {
-    if (!isDragging) return;
-
-    // Calcular cuánto se ha movido el mouse verticalmente
-    const deltaY = (startMouseY - e.clientY) * 0.01; 
-    currentHeight = Math.max(0.1, initialHeight + deltaY); // No permitir altura negativa
-
-    // Actualizar Geometría (Eliminar vieja, crear nueva)
-    mesh.geometry.dispose();
-    mesh.geometry = createExtrusion(currentHeight);
-});
-
-window.addEventListener('mouseup', () => {
-    isDragging = false;
-    controls.enabled = true; // Reactivar cámara
-    mesh.material.color.set(0x3498db); // Volver al azul original
-});
-
+// Loop de animación
 function animate() {
-    requestAnimationFrame(animate);
-    renderer.render(scene, camera);
+  requestAnimationFrame(animate);
+
+  // Ejemplo de animación sutil
+  cube.rotation.x += 0.01;
+  cube.rotation.y += 0.01;
+
+  controls.update();
+  renderer.render(scene, camera);
 }
 animate();
+
+// Resize
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
